@@ -41,6 +41,12 @@ do $$declare f record; m jsonb; target uuid; blocked boolean; begin
  blocked:=false;begin perform public.save_attendance(f.period_open,'[]');exception when others then blocked:=true;end;
  if not blocked then raise exception 'Empty roster accepted';end if;
  insert into test_results values('incomplete roster rejected',true);
+ blocked:=false;begin perform public.save_attendance(f.period_open,null);exception when others then blocked:=true;end;
+ if not blocked then raise exception 'NULL roster accepted';end if;
+ insert into test_results values('NULL roster rejected',true);
+ if not public.consume_assistant_quota() then raise exception 'Initial assistant quota rejected';end if;
+ if public.consume_assistant_quota() then raise exception 'Assistant cooldown bypassed';end if;
+ insert into test_results values('assistant quota and cooldown enforced',true);
 end$$;
 reset role;
 select set_config('request.jwt.claims',(select jsonb_build_object('sub',other_teacher,'session_id',other_session,'role','authenticated')::text from fixture),true);

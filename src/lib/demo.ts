@@ -1,0 +1,11 @@
+import type { Data, Profile, Role } from './types';
+export function demoData(role:Role):{profile:Profile;data:Data} {
+ const now=new Date(); const base=new Date(now); base.setMinutes(0,0,0);
+ const students=['Ayesha Shaikh','Hassan Ali','Fatima Memon','Naveed Narain','Zain Ahmed','Sana Chandio'].map((full_name,i)=>({id:`s${i}`,full_name,email:`2k24-cs-${i+1}@usindh.edu.pk`,roll_number:`2K24-CS-${String(i+1).padStart(3,'0')}`,department_id:'cs',role:'student' as const,verification:'approved' as const}));
+ const teacher:Profile={id:'t1',full_name:'Dr. Sara Memon',email:'teacher@usindh.edu.pk',roll_number:null,department_id:'cs',role:'teacher',verification:'approved'};
+ const admin:Profile={...teacher,id:'a1',full_name:'Campus Administrator',email:'admin@usindh.edu.pk',role:'admin'};
+ const courses=[{id:'c1',title:'Database Management Systems',code:'CS-305',section:'BSCS · Part III · A',kind:'Theory',semester:5,threshold:75,department_id:'cs',teacher_id:'t1'},{id:'c2',title:'Software Engineering',code:'CS-303',section:'BSCS · Part III · A',kind:'Theory',semester:5,threshold:75,department_id:'cs',teacher_id:'t1'},{id:'c3',title:'Computer Networks',code:'CS-307',section:'BSCS · Part III · A',kind:'Practical',semester:5,threshold:75,department_id:'cs',teacher_id:'t1'}];
+ const sessions=Array.from({length:18},(_,i)=>{const start=new Date(base.getTime()+(i<15?-(15-i)*86400000:(i-15)*7200000));return {id:`period${i}`,course_id:`c${i%3+1}`,starts_at:start.toISOString(),ends_at:new Date(+start+3600000).toISOString(),room:['ICT Block · Room 204','Main Block · Room 12','Networking Lab'][i%3],cancelled:false,submitted_at:i<15?start.toISOString():null};});
+ const marks=sessions.filter(s=>s.submitted_at).flatMap((s,i)=>students.map((p,j)=>({session_id:s.id,student_id:p.id,status:((i+j)%5===0?'absent':'present') as 'present'|'absent',updated_at:s.starts_at})));
+ return {profile:role==='student'?students[0]:role==='teacher'?teacher:admin,data:{profiles:[...students,teacher,admin,{...students[1],id:'pending1',full_name:'Mehak Soomro',email:'2k24-cs-112@usindh.edu.pk',roll_number:'2K24-CS-112',verification:'pending'}],departments:[{id:'cs',name:'Computer Science',code:'CS'}],courses,sessions,marks,enrollments:courses.flatMap(c=>students.map(s=>({course_id:c.id,student_id:s.id}))),corrections:[],audit:[]}};
+}

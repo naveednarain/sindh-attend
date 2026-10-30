@@ -1,0 +1,11 @@
+export type Role = 'student'|'teacher'|'admin';
+export type Status = 'present'|'absent'|'late'|'excused';
+export type Profile = {id:string;full_name:string;email:string;roll_number:string|null;department_id:string;role:Role;verification:'pending'|'approved'|'rejected'};
+export type Department = {id:string;name:string;code:string};
+export type Course = {id:string;title:string;code:string;section:string;kind:string;semester:number;threshold:number;department_id:string;teacher_id:string};
+export type Session = {id:string;course_id:string;starts_at:string;ends_at:string;room:string;cancelled:boolean;submitted_at:string|null};
+export type Mark = {session_id:string;student_id:string;status:Status;updated_at:string};
+export type Correction = {id:string;session_id:string;student_id:string;reason:string;requested_status:Status;state:string;resolution:string|null};
+export type Enrollment = {course_id:string;student_id:string};
+export type Audit = {id:number;action:string;entity:string;record_id:string;created_at:string};
+export type Data = {profiles:Profile[];departments:Department[];courses:Course[];sessions:Session[];marks:Mark[];enrollments:Enrollment[];corrections:Correction[];audit:Audit[]};

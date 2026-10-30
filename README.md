@@ -26,6 +26,60 @@ npm run build
 
 Only publishable credentials belong in `NEXT_PUBLIC_*`. `.env.local` is ignored by Git.
 
+## Demo Accounts & University of Sindh Schedule
+
+The project includes realistic demo fixtures for University of Sindh (Jamshoro), including configured departments, faculty staff, student profiles, active enrollments, and a 4-week timetable.
+
+To seed or refresh this demo data anytime, run:
+```bash
+node --env-file=.env.local scripts/seed-demo-data.mjs
+```
+
+### Faculty & Staff Accounts
+
+All demo faculty and admin accounts belong to the `@usindh.edu.pk` domain:
+
+| Role | Name | Department | University Email | Password |
+| :--- | :--- | :--- | :--- | :--- |
+| **Admin** | Demo Administrator | Computer Science | `admin@usindh.edu.pk` | `Admin@Demo2026!` |
+| **Teacher** | Dr. Ahmed Ali | Computer Science | `ahmedali@usindh.edu.pk` | `Teacher@Demo2026!` |
+| **Teacher** | Demo Teacher | Computer Science | `teacher@usindh.edu.pk` | `Teacher@Demo2026!` |
+| **Teacher** | Dr. Sara Khan | Information Technology | `sarakhan@usindh.edu.pk` | `Teacher@Demo2026!` |
+| **Teacher** | Mr. Usman Raza | Software Engineering | `usmanraza@usindh.edu.pk` | `Teacher@Demo2026!` |
+| **Teacher** | Ms. Nadia Shah | Business Administration | `nadiashah@usindh.edu.pk` | `Teacher@Demo2026!` |
+
+### Student Accounts
+
+Pre-enrolled students with historical attendance logs:
+
+| Student Name | Roll Number | Department | Enrolled Courses | Default Password |
+| :--- | :--- | :--- | :--- | :--- |
+| **Ali Hassan** | `2k24cs001` | Computer Science | CS301, CS401, CS301L | `Student@Demo2026!` |
+| **Fatima Noor** | `2k24cs002` | Computer Science | CS301, CS401, CS301L | `Student@Demo2026!` |
+| **Bilal Ahmed** | `2k24it001` | Information Technology | IT302, IT401 | `Student@Demo2026!` |
+| **Zara Hussain** | `2k24se001` | Software Engineering | SE301 | `Student@Demo2026!` |
+| **Jeewan** | `2k26bba117` | Business Administration | BBA301 | `Student@Demo2026!` |
+
+### Weekly Timetable (Monday – Friday | Saturday & Sunday OFF)
+
+Classes are strictly scheduled Monday through Friday during university lecture hours (Asia/Karachi, UTC+5). **Saturdays and Sundays are strictly off.**
+
+| Day | Period (PKT) | Course Code & Title | Venue / Room | Assigned Faculty |
+| :--- | :--- | :--- | :--- | :--- |
+| **Mon & Wed** | `08:30 – 10:00` | **CS301**: Data Structures | IMCS · Room 101 | Dr. Ahmed Ali |
+| **Mon & Wed** | `10:15 – 11:45` | **IT302**: Web Technologies | ICT Center · Room 201 | Dr. Sara Khan |
+| **Mon, Wed & Fri** | `12:00 – 13:30` | **SE301**: Software Requirements Eng | Faculty of Eng. · Room 301 | Mr. Usman Raza |
+| **Tue & Thu** | `08:30 – 10:00` | **IT401**: Network Security | ICT Center · Room 202 | Dr. Sara Khan |
+| **Tue & Thu** | `10:15 – 11:45` | **CS401**: Operating Systems | IMCS · Room 102 | Demo Teacher |
+| **Tue & Thu** | `12:00 – 13:30` | **BBA301**: Business Management | IBA · Executive Hall | Ms. Nadia Shah |
+| **Friday** | `09:00 – 11:30` | **CS301L**: Data Structures Lab | ICT Center · Lab 01 | Dr. Ahmed Ali |
+| **Saturday** | — | **Weekend — OFF** | — | — |
+| **Sunday** | — | **Weekend — OFF** | — | — |
+
+- **Past Sessions**: 2 weeks of completed sessions with submitted attendance records for immediate dashboard statistics and recovery calculations.
+- **Upcoming Sessions**: 2 weeks of upcoming sessions ready for live marking and session testing.
+
+
 ## Supabase project
 
 Project reference: `mfikbalqckbzqqsuexxf`, organization NAVEED, Singapore region. Migrations in `supabase/migrations` were applied through the connected Supabase service. The database contains departments only; previews do not insert sample students into the live database.

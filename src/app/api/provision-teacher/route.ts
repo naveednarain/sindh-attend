@@ -58,25 +58,36 @@ export async function POST(request: Request) {
     // Generate a random temporary password — teacher sets their own via recovery email
     const tempPassword = Array.from(crypto.getRandomValues(new Uint8Array(24))).map(b => b.toString(16).padStart(2, '0')).join('');
 
+    const localPart = email.toLowerCase().split('@')[0];
     const { data: created, error } = await admin.auth.admin.createUser({
       email: email.toLowerCase(),
       password: tempPassword,
       email_confirm: true,
       app_metadata: { portal_role: 'teacher' },
-      user_metadata: { full_name: full_name.trim(), department_id },
+      user_metadata: {
+        full_name: full_name.trim(),
+        department_id,
+        portal_role: 'teacher',
+        roll_number: localPart,
+      },
     });
 
     if (error) return reply(`Could not create account: ${error.message}`, 500);
 
-    // Ensure profile is approved (trigger should handle this, but upsert as fallback)
+    // Ensure profile is approved as a teacher with null roll number
     await admin.from('profiles').upsert({
       id: created.user.id,
       email: email.toLowerCase(),
       full_name: full_name.trim(),
       role: 'teacher',
+      roll_number: null,
       department_id,
       verification: 'approved',
     }, { onConflict: 'id' });
+
+    await admin.auth.admin.updateUserById(created.user.id, {
+      app_metadata: { portal_role: 'teacher' },
+    });
 
     return reply(`Teacher account created for ${full_name.trim()}. Send a password-recovery email so they can set their own password.`, 201);
   } catch {
